@@ -3,5 +3,9 @@
 from app import app
 
 @app.route('/')
-def hello_world():
+def index():
     return 'Hello Worlddd!'
+
+@app.route('/route/<testvariable>')
+def testFunction(testvariable):
+	return "You passed in the variable %s" % testvariable
