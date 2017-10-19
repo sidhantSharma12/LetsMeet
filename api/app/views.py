@@ -1,7 +1,8 @@
 #This file contains all the routes for our application.
 
 from app import app
-from flask import request 
+from flask import request, jsonify 
+import types 
 
 from flaskext.mysql import MySQL
 
@@ -14,7 +15,8 @@ mysql.init_app(app)
 
 @app.route('/')
 def index():
-	return 'Hello Worlddd!'
+	dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+	return jsonify(dict)
 
 @app.route('/route/<testvariable>')
 def testFunction(testvariable):
@@ -30,13 +32,11 @@ def getHttpTest():
 
 @app.route("/Authenticate")
 def Authenticate():
-	username = request.args.get('UserName')
-	password = request.args.get('Password')
 	cursor = mysql.connect().cursor()
-	cursor.execute("SELECT * from User where Username='" + username + "' and Password='" + password + "'")
+	cursor.execute("SELECT * from User where Username='admin' and Password='Admin'")
 	data = cursor.fetchone()
 	if data is None:
-		return "Username or Password is wrong"
+		return jsonify("Username or Password is wrong")
 	else:
-		return "Logged in successfully"	
+		return jsonify("Logged in successfully")
 
