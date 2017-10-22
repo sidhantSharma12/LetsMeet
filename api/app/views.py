@@ -1,8 +1,6 @@
 #This file contains all the routes for our application.
-
 from app import app
 from flask import request, jsonify 
-import types 
 
 from flaskext.mysql import MySQL
 
