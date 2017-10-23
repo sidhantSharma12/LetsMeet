@@ -1,6 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator } from 'react-navigation';
+
+class RecentChatsScreen extends React.Component {
+  render() {
+    return <Text>List of recent chats</Text>
+  }
+}
+
+class AllContactsScreen extends React.Component {
+  render() {
+    return <Text>List of all contacts</Text>
+  }
+}
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -43,21 +55,23 @@ class HomeScreen extends React.Component {
         <Text>{this.state.showText}</Text>
         <Button onPress={this.login} title="Login" color="#841584"/>
         <Button onPress={this.signup} title="Signup" color="#841584"/>
-        <Button onPress={() => navigate('Chat')} title="Chat with Lucy"/>
+        <Button onPress={() => navigate('Chat', { user: 'Lucyyy' })} title="Chat with Lucy"/>
       </View>
     );
   }
 }
+const MainScreenNavigator = TabNavigator({
+  Recent: { screen: RecentChatsScreen },
+  All: { screen: AllContactsScreen },
+});
 
 class ChatScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Chat with Lucy',
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: `Chat with ${navigation.state.params.user}`,
+  });
   render() {
     return (
-      <View>
-        <Text>Hello Text</Text>
-      </View>
+      <MainScreenNavigator/>
     );
   }
 }
