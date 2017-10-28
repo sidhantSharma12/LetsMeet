@@ -1,6 +1,7 @@
 #This file contains all the routes for our application.
 from app import app
-from flask import request, jsonify 
+from flask import request, jsonify
+import json
 
 from flaskext.mysql import MySQL
 
@@ -27,6 +28,17 @@ def testIntFunction(id):
 @app.route('/getme', methods=["POST"])
 def getHttpTest():
 	return "GET test"
+
+@app.route('/storeloc',  methods=["POST"])	
+def postLatAndLong():
+	# data in string format and you have to parse into dictionary
+	data = request.data
+	dataDict = json.loads(data)
+	cursor = mysql.connect().cursor()
+	cursor.execute("INSERT INTO Location VALUES (NULL, "+ str(dataDict['lat']) + "," + str(dataDict['long']) + ")")
+	dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+	return jsonify(dict) 
+
 
 @app.route("/Authenticate")
 def Authenticate():
