@@ -34,8 +34,14 @@ def postLatAndLong():
 	# data in string format and you have to parse into dictionary
 	data = request.data
 	dataDict = json.loads(data)
-	cursor = mysql.connect().cursor()
-	cursor.execute("INSERT INTO Location VALUES (NULL, "+ str(dataDict['lat']) + "," + str(dataDict['long']) + ")")
+	conn = mysql.connect()
+	cursor = conn.cursor()
+	query = "INSERT INTO Location VALUES (NULL, %s, %s)"
+	cursor.execute(query, (dataDict['lat'], dataDict['long']))
+	conn.commit()
+	cursor.execute("SELECT * FROM Location")
+	ans = cursor.fetchall()
+	print(ans)
 	dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
 	return jsonify(dict) 
 
