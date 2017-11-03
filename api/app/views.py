@@ -2,6 +2,7 @@
 from app import app
 from flask import request, jsonify
 import json
+import requests
 
 from flaskext.mysql import MySQL
 
@@ -17,35 +18,46 @@ def index():
 	dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
 	return jsonify(dict)
 
-@app.route('/route/<testvariable>')
-def testFunction(testvariable):
-	return "You passed in the variable %s" % testvariable
-
 @app.route('/post/<int:id>')
 def testIntFunction(id):
 	return "You passed in the integer %d" % id
 
-@app.route('/getme', methods=["POST"])
-def getHttpTest():
-	return "GET test"
+@app.route('/filterloc', methods=["POST"])
+def filterLocation():
+	dataDict = json.loads(request.data)
+	origin= dataDict["origin"]
+	destination = dataDict["destination"]
+	url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=%s&destinations=%s&key=AIzaSyDjK27JwFmy1ppJYdgzmbKwHlaUgNuSUzM" % (origin, destination)
+	r = requests.get(url)
+	return r.text
 
-@app.route('/storeloc',  methods=["POST"])	
+@app.route('/storeloc', methods=["POST"])	
 def postLatAndLong():
 	# data in string format and you have to parse into dictionary
-	data = request.data
-	dataDict = json.loads(data)
+	dataDict = json.loads(request.data)
 	conn = mysql.connect()
 	cursor = conn.cursor()
-	query = "INSERT INTO Location VALUES (NULL, %s, %s)"
-	cursor.execute(query, (dataDict['lat'], dataDict['long']))
+	query = "INSERT INTO Location VALUES (NULL, %s, %s, %s)"
+	cursor.execute(query, (dataDict['lat'], dataDict['long'], dataDict['description']))
 	conn.commit()
-	cursor.execute("SELECT * FROM Location")
-	ans = cursor.fetchall()
-	print(ans)
-	dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
-	return jsonify(dict) 
+	return jsonify({}), 200
 
+@app.route('/getcord', methods=["POST"])
+def getcord():
+	dataDict = json.loads(request.data)
+	address = dataDict["address"]
+	url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyDjK27JwFmy1ppJYdgzmbKwHlaUgNuSUzM" % address
+	r= requests.get(url)
+	jsonData = json.loads(r.text)
+	return jsonify(jsonData["results"][0]["geometry"]["location"])
 
+@app.route('/location', methods=["POST"])	
+def location():
+	dataDict = json.loads(request.data)
+	r=requests.post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDjK27JwFmy1ppJYdgzmbKwHlaUgNuSUzM")
+	return r.text
+
+		
 @app.route("/Authenticate")
 def Authenticate():
 	cursor = mysql.connect().cursor()
