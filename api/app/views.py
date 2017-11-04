@@ -37,11 +37,18 @@ def postLatAndLong():
 	dataDict = json.loads(request.data)
 	conn = mysql.connect()
 	cursor = conn.cursor()
-	print(dataDict['lat'])
 	query = "INSERT INTO Location VALUES (NULL, %s, %s, %s)"
 	cursor.execute(query, (dataDict['lat'], dataDict['long'], dataDict['description']))
 	conn.commit()
 	return jsonify({}), 200
+
+@app.route('/getallloc')	
+def getAllLocation():
+	conn = mysql.connect()
+	cursor = conn.cursor()
+	cursor.execute("SELECT latitude, longitude, description from Location")
+	data = cursor.fetchall()
+	return jsonify(data)
 
 @app.route('/getcord', methods=["POST"])
 def getcord():
