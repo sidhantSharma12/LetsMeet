@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import MapView from 'react-native-maps';
 
-class AllContactsScreen extends React.Component {
+class Maps extends React.Component {
   render() {
     return (
           <View style={styles.container}> 
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
   }
 });
 
-module.exports = AllContactsScreen;
+module.exports = Maps;
