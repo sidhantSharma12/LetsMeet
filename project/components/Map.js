@@ -7,7 +7,7 @@ class Maps extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {data: {}};
+    this.state = {data: []};
   }
 
   componentWillMount(){
@@ -21,33 +21,30 @@ class Maps extends React.Component {
   render() {
     return (
           <View style={styles.container}> 
+          <MapView 
+                    initialRegion={{
+                    latitude: 43,
+                    longitude: -79,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                    }} 
+                    style={styles.map}>
            {(() => { 
-                data = this.state.data;
-               for(var i=0; i<data.length; i++){
-             return (<MapView
-              initialRegion={{
-                latitude: data[i][0],
-                longitude: data[i][1],
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              style={styles.map}>
-                <MapView.Marker 
-                  coordinate={{
-                    latitude: data[i][0],
-                    longitude: data[i][1]
-                  }}
-                >
-                  <View style={styles.radius}>
-                    <View style={styles.marker}/>
-                  </View>
-                </MapView.Marker>
+               return this.state.data.map(function(item, i){
+                 return (
+                      <MapView.Marker 
+                        key={i}
+                        coordinate={{
+                        latitude: item[0],
+                        longitude: item[1]
+                        }}
+                         >
 
-               </MapView>);
-
-               }
+                      </MapView.Marker>
+                    );
+               });
              })()}
-            
+            </MapView>
           </View>
           );
   }
