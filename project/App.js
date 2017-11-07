@@ -2,13 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import HomeScreen from './components/Homescreen.js';
-import ChatScreen from './components/Chatscreen.js';
 import Location from './components/Location.js';
+import Maps from './components/Map.js';
 
 const SimpleApp = StackNavigator({
   Home: { screen: HomeScreen },
-  Chat: { screen: ChatScreen },
-  Location: {screen: Location}
+  Location: {screen: Location},
+  Map: {screen: Maps}
 });
 
 export default class App extends React.Component {

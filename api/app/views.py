@@ -22,23 +22,14 @@ def index():
 def testIntFunction(id):
 	return "You passed in the integer %d" % id
 
-@app.route('/filterloc', methods=["POST"])
-def filterLocation():
-	dataDict = json.loads(request.data)
-	origin= dataDict["origin"]
-	destination = dataDict["destination"]
-	url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=%s&destinations=%s&key=AIzaSyDjK27JwFmy1ppJYdgzmbKwHlaUgNuSUzM" % (origin, destination)
-	r = requests.get(url)
-	return r.text
-
 @app.route('/storeloc', methods=["POST"])	
 def postLatAndLong():
 	# data in string format and you have to parse into dictionary
 	dataDict = json.loads(request.data)
 	conn = mysql.connect()
 	cursor = conn.cursor()
-	query = "INSERT INTO Location VALUES (NULL, %s, %s, %s)"
-	cursor.execute(query, (dataDict['lat'], dataDict['long'], dataDict['description']))
+	query = "INSERT INTO Location VALUES (NULL, %s, %s, %s, %s)"
+	cursor.execute(query, (dataDict['lat'], dataDict['long'], dataDict['name'], dataDict['description']))
 	conn.commit()
 	return jsonify({}), 200
 
@@ -46,7 +37,7 @@ def postLatAndLong():
 def getAllLocation():
 	conn = mysql.connect()
 	cursor = conn.cursor()
-	cursor.execute("SELECT latitude, longitude, description from Location")
+	cursor.execute("SELECT latitude, longitude, name, description from Location")
 	data = cursor.fetchall()
 	return jsonify(data)
 
@@ -58,12 +49,6 @@ def getcord():
 	r= requests.get(url)
 	jsonData = json.loads(r.text)
 	return jsonify(jsonData["results"][0]["geometry"]["location"])
-
-@app.route('/location', methods=["POST"])	
-def location():
-	dataDict = json.loads(request.data)
-	r=requests.post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDjK27JwFmy1ppJYdgzmbKwHlaUgNuSUzM")
-	return r.text
 
 		
 @app.route("/Authenticate")

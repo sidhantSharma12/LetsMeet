@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button} from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 
 export default class Location extends React.Component {
@@ -9,7 +9,7 @@ export default class Location extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {location: '', description:''};
+    this.state = {location: '', name:'', description:''};
   }
 
   submit(){
@@ -34,11 +34,12 @@ export default class Location extends React.Component {
 		    body: JSON.stringify({
 				lat: responseJson.lat,
 				long: responseJson.lng,
-				description: this.state.description
+				name: this.state.name,
+        description : this.state.description
 			})
 		})
      })
-    }
+  }
 
   render() {
     return (
@@ -50,7 +51,12 @@ export default class Location extends React.Component {
         />
         <TextInput
           style={{height: 40}}
-          placeholder="Description"
+          placeholder="Name of the place"
+          onChangeText={(text) => this.setState({name : text})}
+        />
+        <TextInput
+          style={{height: 40}}
+          placeholder="Description of the place"
           onChangeText={(text) => this.setState({description : text})}
         />
         <Button title="Submit" onPress={this.submit.bind(this)}/> 
