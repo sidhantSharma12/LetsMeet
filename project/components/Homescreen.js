@@ -14,7 +14,7 @@ class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Button onPress={() => navigate('Map', { user: 'Lucyyy' })} title="Find locationss"/>
+        <Button onPress={() => navigate('Map', { user: 'Lucyyy' })} title="Find locations"/>
         <Button onPress={() => navigate('Location')} title="Enter Locations" color="#841584"/>
       </View>
     );

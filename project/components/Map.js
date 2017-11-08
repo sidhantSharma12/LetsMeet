@@ -8,7 +8,7 @@ class Maps extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {slider:10, acceptedValues:[]};
+    this.state = {slider:10, acceptedValues:[], data:[], location:{}};
   }
 
   componentWillMount(){
@@ -37,13 +37,23 @@ class Maps extends React.Component {
           }
         }, this);  
       
-        this.setState({acceptedValues: acceptedValue}); //lat and lng
+        this.setState({acceptedValues: acceptedValue, data: data, location:locationJs.location}); //lat and lng
       });
      });    
   }
 
   changeSlider(value){
-    console.log(value);
+    var acceptedValue =[];
+        this.state.data.map(function(item, i){
+          var distance = geolib.getDistance(
+            {latitude: this.state.location.lat, longitude:  this.state.location.lng},
+            {latitude: item[0], longitude:item[1]}
+          );
+          if(distance <= (value*1000)){
+            acceptedValue.push(item);
+          }
+        }, this); 
+        this.setState({acceptedValues: acceptedValue, slider: value});
   }
   render() {
     return (
@@ -73,7 +83,7 @@ class Maps extends React.Component {
                     );
                });
              })()}
-            <Slider value={10} minimumValue={1} maximumValue={50} onValueChange={(value) => this.setState({slider: value})}/>
+            <Slider value={10} minimumValue={1} maximumValue={50} onValueChange={this.changeSlider.bind(this)}/>
               <Text>Value: {this.state.slider}</Text>
             </MapView>
           </View>

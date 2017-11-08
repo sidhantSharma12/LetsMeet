@@ -13,6 +13,8 @@ export default class Location extends React.Component {
   }
 
   submit(){
+    const { navigate } = this.props.navigation;
+
   	fetch('http://127.0.0.1:5000/getcord', {
 		method: 'POST',
 		headers: {
@@ -26,18 +28,21 @@ export default class Location extends React.Component {
 	.then((response) => response.json())
     .then((responseJson) => {
         fetch('http://127.0.0.1:5000/storeloc', {
-			method: 'POST',
-			headers: {
-			    'Accept': 'application/json',
-			    'Content-Type': 'application/json',
-			},
-		    body: JSON.stringify({
-				lat: responseJson.lat,
-				long: responseJson.lng,
-				name: this.state.name,
-        description : this.state.description
-			})
-		})
+    			method: 'POST',
+    			headers: {
+    			    'Accept': 'application/json',
+    			    'Content-Type': 'application/json',
+    			},
+    		    body: JSON.stringify({
+    				lat: responseJson.lat,
+    				long: responseJson.lng,
+    				name: this.state.name,
+            description : this.state.description
+    			}) 
+        })  
+        .then((responseJson) => {
+          navigate('Map', { user: 'Lucyyy' });
+        })  
      })
   }
 
