@@ -1,1 +1,1 @@
-An application which will tell locations to meet between 2 or more people (such as famous locations in between the two individuals) using react native in front end and python at the server side.
+An application which allows users to mark and review locations in a city. Users can also see the rating of these locations and decide whether they also want to go there. This project is built using react native in front end and python at the server side.
